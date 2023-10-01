@@ -98,6 +98,9 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 alias chmod='chmod -v'
+alias c="clear; ls -ahl"
+alias v="vim"
+alias x="exit"
 
 # Git Aliases
 alias gs='git status'
