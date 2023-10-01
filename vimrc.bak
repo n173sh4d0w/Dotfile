@@ -1,5 +1,6 @@
-"" GENERAL SETTINGS set nocompatible
-set ttyfast "Speed up scrolling in Vim
+" GENERAL SETTINGS
+set nocompatible
+set ttyfast " Speed up scrolling in Vim
 syntax on
 set number
 set history=1000
@@ -18,11 +19,11 @@ set scrolloff=8
 set showmatch    " Show matching brackets.
 set hidden       " Hide buffers when they are abandoned
 set matchpairs+=<:>  " Highlight matching pairs of brackets. '%' character to jump within
-set cursorline              " highlight current cursor
+set cursorline   " Highlight current cursor
 set cursorcolumn
-set confirm    " Display a confirmation dialog when closing an unsaved file
-set ruler    " Always show current position
-set cmdheight=1    " Height of the command bar
+set confirm      " Display a confirmation dialog when closing an unsaved file
+set ruler        " Always show current position
+set cmdheight=1  " Height of the command bar
 
 set incsearch
 set ignorecase
@@ -48,26 +49,26 @@ set expandtab
 filetype plugin on
 filetype indent on
 
-"" FUNCTIONS
-" auto-compile suckless progs/c files
-autocmd BuffWritePost config.h,config.def.h !sudo make install
+" FUNCTIONS
+" Auto-compile suckless progs/c files
+autocmd BufWritePost config.h,config.def.h !sudo make install
 " Disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Automatically deletes all trailing whitespace and newlines at end of file on save. & reset cursor position
- 	autocmd BufWritePre * let currPos = getpos(".")
-	autocmd BufWritePre * %s/\s\+$//e
-	autocmd BufWritePre * %s/\n\+\%$//e
-  autocmd BufWritePre *.[ch] %s/\%$/\r/e " add trailing newline for ANSI C standard
-  autocmd BufWritePre *neomutt* %s/^--$/-- /e " dash-dash-space signature delimiter in emails
-  	autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
+autocmd BufWritePre * let currPos = getpos(".")
+autocmd BufWritePre * %s/\s\+$//e
+autocmd BufWritePre * %s/\n\+\%$//e
+autocmd BufWritePre *.[ch] %s/\%$/\r/e " add trailing newline for ANSI C standard
+autocmd BufWritePre *neomutt* %s/^--$/-- /e " dash-dash-space signature delimiter in emails
+autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 
-"" MAPPING
-let mapleader = " " "Maps Leader to space
-" set netrw vsplit width
+" MAPPING
+let mapleader = " " " Maps Leader to space
+" Set netrw vsplit width
 let g:netrw_winsize = 15
-" auto netrw once open vim
+" Auto netrw once open Vim
 autocmd VimEnter * Vexplore
-" default terminal height
+" Default terminal height
 autocmd TermOpen * set winheight=3
 " Open terminal inside Vim
 map <Leader>tt :vnew term://bash<CR>
@@ -78,7 +79,7 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-" Make adjusing split sizes a bit more friendly
+" Make adjusting split sizes a bit more friendly
 noremap <silent> <C-Left> :vertical resize +3<CR>
 noremap <silent> <C-Right> :vertical resize -3<CR>
 noremap <silent> <C-Up> :resize +3<CR>
@@ -86,21 +87,19 @@ noremap <silent> <C-Down> :resize -3<CR>
 " Change 2 split windows from vert to horiz or horiz to vert
 map <Leader>th <C-w>t<C-w>H
 map <Leader>tk <C-w>t<C-w>K
-" Removes pipes | that act as seperators on splits
+" Removes pipes | that act as separators on splits
 set fillchars+=vert:\
 " Open corresponding .pdf/.html or preview
 map <leader>p :!opout "%:p"<CR>
-" Open corresponding .pdf/.html or preview
-map <leader>p :!opout "%:p"<CR>
-" F3 to toggle netrw as vetical split
+" F3 to toggle netrw as vertical split
 nnoremap <F3> : Vexplore<CR>
 " Map < and > to adjust split window width by 5 characters
 nnoremap <C-W><Left> :vertical resize -5<CR>
 nnoremap <C-W><Right> :vertical resize +5<CR>
 
-""" FOLD
+" FOLD
 " za to toggle  http://vimcasts.org/episodes/writing-a-custom-fold-expression/
-" defines a foldlevel for each line of code
+" Defines a foldlevel for each line of code
 function! VimFolds(lnum)
   let s:thisline = getline(a:lnum)
   if match(s:thisline, '^"" ') >= 0
@@ -116,8 +115,7 @@ function! VimFolds(lnum)
     let s:two_following_lines = 1
   endif
   if !s:two_following_lines
-      return '='
-    endif
+    return '='
   else
     if (match(s:thisline, '^"""""') >= 0) &&
        \ (match(s:line_1_after, '^"  ') >= 0) &&
@@ -128,9 +126,9 @@ function! VimFolds(lnum)
     endif
   endif
 endfunction
-" defines a foldtext
+" Defines a foldtext
 function! VimFoldText()
-  " handle special case of normal comment first
+  " Handle a special case of a normal comment first
   let s:info = '('.string(v:foldend-v:foldstart).' l)'
   if v:foldlevel == 1
     let s:line = ' ◇ '.getline(v:foldstart+1)[3:-2]
@@ -145,22 +143,20 @@ function! VimFoldText()
     return s:line.repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
   endif
 endfunction
-" set foldsettings automatically for vim files
+" Set foldsettings automatically for vim files
 augroup fold_vimrc
   autocmd!
   autocmd FileType vim
-                   \ setlocal foldmethod=expr |
-                   \ setlocal foldexpr=VimFolds(v:lnum) |
-                   \ setlocal foldtext=VimFoldText() |
-     "              \ set foldcolumn=2 foldminlines=2
+    \ setlocal foldmethod=expr |
+    \ setlocal foldexpr=VimFolds(v:lnum) |
+    \ setlocal foldtext=VimFoldText() |
+    \ setlocal foldcolumn=2 foldminlines=2
 augroup END
 " Toggle folds open&closed by pressing space twice
 nnoremap <silent> <leader><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <leader><space> zf
 
-
-
-"" PLUGINS&CONFIGS
+" PLUGINS & CONFIGS
 " Plugins :PlugInstall, :PlugUninstall ; https://github.com/junegunn/vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -187,7 +183,7 @@ call plug#begin()
   Plug 'godlygeek/tabular'
   Plug 'yggdroot/indentline'
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-  Plug 'junegunn/fzf.vim' "Fuzzy find plugin
+  Plug 'junegunn/fzf.vim' " Fuzzy find plugin
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'majutsushi/tagbar'
@@ -197,11 +193,11 @@ call plug#begin()
   Plug 'vim-python/python-syntax'
   Plug 'ap/vim-css-color'
 
-  Plug '907th/vim-auto-save' "auto saves files as you edit
-  Plug 'jdhao/better-escape.vim' "remaps esc key to jj
+  Plug '907th/vim-auto-save' " Auto saves files as you edit
+  Plug 'jdhao/better-escape.vim' " Remaps esc key to jj
 call plug#end()
 
-""" CONFIGS
+" CONFIGS
 " Plugin Shortcuts
 map <Leader>f :NERDTreeToggle<CR>
 nnoremap <C-f> :Files!<CR>
@@ -210,15 +206,15 @@ let g:better_escape_shortcut = 'jj'
 let g:better_escape_interval = 250
 
 " General Shortcuts
-  nnoremap S :%s//g<Left><Left>
-  nmap <Leader>r :w<CR>:so %<CR>
-  map <Leader>e $
+nnoremap S :%s//g<Left><Left>
+nmap <Leader>r :w<CR>:so %<CR>
+map <Leader>e $
 
-" lang-servers/completion/syntax
+" Lang-servers/completion/syntax
 "
 "
 
-" :CocInstall extentionname1 extentionname2 ...;  :CocConfig;
+" :CocInstall extensionname1 extensionname2 ...; :CocConfig;
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
@@ -244,7 +240,6 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
@@ -252,7 +247,7 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
 " c-n/p to select
- " path to directory where library can be found
+" Path to directory where the library can be found
 let g:clang_library_path='/usr/lib/llvm-3.8/lib'
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
@@ -262,20 +257,18 @@ let g:cpp_experimental_simple_template_highlight = 1
 let g:cpp_concepts_highlight = 1
 let g:cpp_no_function_highlight = 1
 
-
-"git/markdown
+" Git/Markdown
 " Markdown Edits
-  let g:vim_markdown_autowrite = 1
-  let g:vim_markdown_no_extensions_in_markdown = 1
-  let g:vim_markdown_conceal = 0
-  let g:vim_markdown_override_foldtext = 0
-  let g:vim_markdown_folding_disabled = 1
-  let g:vim_markdown_new_list_item_indent = 0
-  let g:instant_markdown_autostart = 0
-  let g:instant_markdown_browser = "brave-browser-nightly"
-  map <Leader>md :InstantMarkdownPreview<CR>
-  map <Leader>ms :InstantMarkdownStop<CR>
-
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_no_extensions_in_markdown = 1
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_override_foldtext = 0
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_new_list_item_indent = 0
+let g:instant_markdown_autostart = 0
+let g:instant_markdown_browser = "brave-browser-nightly"
+map <Leader>md :InstantMarkdownPreview<CR>
+map <Leader>ms :InstantMarkdownStop<CR>
 
 " Markdown auto format tables
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
@@ -291,17 +284,16 @@ function! s:align()
   endif
 endfunction
 
-" transparent bg
+" Transparent bg
 autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
-"
-"Utilities
+
+" Utilities
 let g:indentLine_setColors = 0
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
 
 let $FZF_DEFAULT_COMMAND = 'fdfind --type f --hidden --follow --exclude .git --ignore-file ~/.ignore'
-
 
 colorscheme molokai
 
@@ -318,7 +310,7 @@ let g:python_highlight_all = 1
 au! BufRead,BufWrite,BufWritePost,BufNewFile *.org
 au BufEnter *.org            call org#SetOrgFileType()
 
-set guioptions-=m  "remove menu bar
-set guioptions-=T  "remove toolbar
-set guioptions-=r  "remove right-hand scroll bar
-set guioptions-=L  "remove left-hand scroll bar
+set guioptions-=m  " Remove menu bar
+set guioptions-=T  " Remove toolbar
+set guioptions-=r  " Remove right-hand scroll bar
+set guioptions-=L  " Remove left-hand scroll bar
