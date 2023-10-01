@@ -1,4 +1,4 @@
-" GENERAL SETTINGS
+"" GENERAL SETTINGS
 set nocompatible
 set ttyfast " Speed up scrolling in Vim
 syntax on
@@ -8,7 +8,6 @@ set showmode
 set visualbell
 set noerrorbells
 set autoread
-set termsize=3
 set gcr=a:blinkon0
 set relativenumber
 set encoding=UTF-8
@@ -49,7 +48,7 @@ set expandtab
 filetype plugin on
 filetype indent on
 
-" FUNCTIONS
+"" FUNCTIONS
 " Auto-compile suckless progs/c files
 autocmd BufWritePost config.h,config.def.h !sudo make install
 " Disables automatic commenting on newline:
@@ -62,14 +61,12 @@ autocmd BufWritePre *.[ch] %s/\%$/\r/e " add trailing newline for ANSI C standar
 autocmd BufWritePre *neomutt* %s/^--$/-- /e " dash-dash-space signature delimiter in emails
 autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 
-" MAPPING
+"" MAPPING
 let mapleader = " " " Maps Leader to space
 " Set netrw vsplit width
 let g:netrw_winsize = 15
 " Auto netrw once open Vim
 autocmd VimEnter * Vexplore
-" Default terminal height
-autocmd TermOpen * set winheight=3
 " Open terminal inside Vim
 map <Leader>tt :vnew term://bash<CR>
 " Splits and Tabbed Files
@@ -97,7 +94,7 @@ nnoremap <F3> : Vexplore<CR>
 nnoremap <C-W><Left> :vertical resize -5<CR>
 nnoremap <C-W><Right> :vertical resize +5<CR>
 
-" FOLD
+"" FOLD
 " za to toggle  http://vimcasts.org/episodes/writing-a-custom-fold-expression/
 " Defines a foldlevel for each line of code
 function! VimFolds(lnum)
@@ -156,7 +153,7 @@ augroup END
 nnoremap <silent> <leader><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <leader><space> zf
 
-" PLUGINS & CONFIGS
+"" PLUGINS & CONFIGS
 " Plugins :PlugInstall, :PlugUninstall ; https://github.com/junegunn/vim-plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -197,7 +194,7 @@ call plug#begin()
   Plug 'jdhao/better-escape.vim' " Remaps esc key to jj
 call plug#end()
 
-" CONFIGS
+"" CONFIGS
 " Plugin Shortcuts
 map <Leader>f :NERDTreeToggle<CR>
 nnoremap <C-f> :Files!<CR>
